@@ -1,2 +1,2 @@
-# kob
-SpringBoot
+# Dual Snake Game
+SpringBoot + MySQL + Vue
