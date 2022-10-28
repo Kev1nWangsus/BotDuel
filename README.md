@@ -1,2 +1,2 @@
-# Dual Snake Game
+# Snake Duel
 SpringBoot + MySQL + Vue
