@@ -1,24 +1,70 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import PkIndexView from '../views/pk/PkIndexView'
+import RecordIndexView from '../views/record/RecordIndexView'
+import RanklistIndexView from '../views/ranklist/RanklistIndexView'
+import UserBotIndexView from '../views/user/bot/UserBotIndexView'
+import NotFoundView from '../views/error/NotFoundView'
+//import UserAccountLoginView from '../views/user/account/UserAccountLoginView'
+//import UserAccountRegisterView from '../views/user/account/UserAccountRegisterView'
+
+
 
 const routes = [
+  // redirection root 
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: "home",
+    redirect: "/pk/",
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: "/pk/",
+    name: "pk_index",
+    component: PkIndexView,
+  },
+  {
+    path: "/record/",
+    name: "record_index",
+    component: RecordIndexView,
+
+  },
+  {
+    path: "/ranklist",
+    name: "ranklist_index",
+    component: RanklistIndexView,
+
+  },
+  {
+    path: "/user/",
+    name: "user_bot_index",
+    component: UserBotIndexView,
+
+  },
+  // {
+  //   path: "/user/account/login/",
+  //   name: "user_account_login",
+  //   component: UserAccountLoginView,
+  // },
+  // {
+  //   path: "/user/account/register/",
+  //   name: "user_account_register",
+  //   component: UserAccountRegisterView,
+  // },
+  {
+    path: "/404/",
+    name: "404",
+    component: NotFoundView,
+  },
+
+  // all other illegal webpages
+  {
+    path: "/:catchAl(.*)",
+    redirect: "/404/"
   }
+
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
