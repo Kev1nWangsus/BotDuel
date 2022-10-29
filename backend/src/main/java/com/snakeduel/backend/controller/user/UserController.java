@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.snakeduel.backend.mapper.UserMapper;
 import com.snakeduel.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,9 @@ public class UserController {
             @PathVariable int userId,
             @PathVariable String username,
             @PathVariable String password) {
-        User user = new User(userId, username, password);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(userId, username, encodedPassword);
         userMapper.insert(user);
         return "Created a user";
     }
