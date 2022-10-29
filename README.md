@@ -1,2 +1,2 @@
-# Snake Duel
+# Bot Duel
 SpringBoot + MySQL + Vue
