@@ -1,2 +1,2 @@
 # Bot Duel
-SpringBoot + MyBatis-Plus + Microservices + MySQL + Vue
+SpringBoot + SpringCloud + MyBatis-Plus + MySQL + Vue
