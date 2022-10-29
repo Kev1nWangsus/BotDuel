@@ -14,10 +14,7 @@
 
 <style scoped>
     div.content-field{
-        margin:10px;
-    }
-    .content-color{
-        background-color:lightblue;
+        margin-top:20px;
     }
     
 </style>
