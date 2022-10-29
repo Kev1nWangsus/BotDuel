@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author wangs
+ */
 @RestController
 @RequestMapping("/pk/")
 public class BotInfoController {

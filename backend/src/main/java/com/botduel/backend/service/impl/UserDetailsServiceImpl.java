@@ -3,7 +3,7 @@ package com.botduel.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.botduel.backend.mapper.UserMapper;
 import com.botduel.backend.pojo.User;
-import com.botduel.backend.service.impl.utils.UserDetailImpl;
+import com.botduel.backend.service.impl.utils.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new RuntimeException("User does not exist.");
         }
-        return new UserDetailImpl(user);
+        return new UserDetailsImpl(user);
     }
 }
