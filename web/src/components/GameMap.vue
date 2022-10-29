@@ -25,11 +25,11 @@ export default {
 }
 </script>
 <style scoped>
-    div.gamemap {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-content: center;
-        justify-content: center; 
-    }
+div.gamemap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center; 
+}
 </style>
