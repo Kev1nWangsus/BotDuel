@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="botduel@localhost">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.43">
+    <root id="1">
+      <DefaultCasing>lower/lower</DefaultCasing>
+      <DefaultEngine>InnoDB</DefaultEngine>
+      <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
+      <ServerVersion>8.0.31</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="botduel">
+      <Current>1</Current>
+    </schema>
+    <schema id="3" parent="1" name="bruineats"/>
+    <schema id="4" parent="1" name="information_schema"/>
+    <schema id="5" parent="1" name="mysql"/>
+    <schema id="6" parent="1" name="performance_schema"/>
+    <schema id="7" parent="1" name="sakila"/>
+    <schema id="8" parent="1" name="snakeduel"/>
+    <schema id="9" parent="1" name="sys"/>
+    <schema id="10" parent="1" name="world"/>
+    <table id="11" parent="2" name="user">
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <column id="12" parent="11" name="id">
+      <DataType>int|0s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="13" parent="11" name="username">
+      <DataType>varchar(100)|0s</DataType>
+      <Position>2</Position>
+    </column>
+    <column id="14" parent="11" name="password">
+      <DataType>varchar(100)|0s</DataType>
+      <Position>3</Position>
+    </column>
+  </database-model>
+</dataSource>

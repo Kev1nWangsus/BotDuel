@@ -1,9 +1,9 @@
-package com.snakeduel.backend.controller.user;
+package com.botduel.backend.controller.user;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.snakeduel.backend.mapper.UserMapper;
-import com.snakeduel.backend.pojo.User;
+import com.botduel.backend.mapper.UserMapper;
+import com.botduel.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,7 +1,7 @@
-package com.snakeduel.backend.mapper;
+package com.botduel.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.snakeduel.backend.pojo.User;
+import com.botduel.backend.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

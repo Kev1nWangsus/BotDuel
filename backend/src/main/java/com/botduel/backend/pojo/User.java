@@ -1,4 +1,4 @@
-package com.snakeduel.backend.pojo;
+package com.botduel.backend.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

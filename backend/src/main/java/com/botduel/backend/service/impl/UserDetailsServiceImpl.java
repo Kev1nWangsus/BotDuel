@@ -1,9 +1,9 @@
-package com.snakeduel.backend.service.impl;
+package com.botduel.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.snakeduel.backend.mapper.UserMapper;
-import com.snakeduel.backend.pojo.User;
-import com.snakeduel.backend.service.impl.utils.UserDetailImpl;
+import com.botduel.backend.mapper.UserMapper;
+import com.botduel.backend.pojo.User;
+import com.botduel.backend.service.impl.utils.UserDetailImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

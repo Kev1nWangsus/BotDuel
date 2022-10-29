@@ -1,4 +1,4 @@
-package com.snakeduel.backend.config;
+package com.botduel.backend.config;
 
 import org.springframework.context.annotation.Configuration;
 
