@@ -7,10 +7,12 @@ export default {
     photo: "",
     token: "",
     is_login: false,
+    loading_info: true,
   },
   getters: {
   },
   mutations: {
+    // commit
     updateUser(state, user) {
       state.id = user.id;
       state.username = user.username;
@@ -28,6 +30,10 @@ export default {
       state.photo = "";
       state.token = "";
       state.is_login = false;
+    },
+
+    updateLoadingInfo(state, loading_info) {
+      state.loading_info = loading_info;
     }
   },
   actions: {
@@ -41,6 +47,7 @@ export default {
           },
           success(resp) {
             if (resp.error_message === "success") {
+              localStorage.setItem("jwt_token", resp.token);
               context.commit("updateToken", resp.token);
               data.success(resp);
             } else {
@@ -52,6 +59,7 @@ export default {
           }
       });
     },
+
     getinfo(context, data) {
       $.ajax({
         url: "http://localhost:3000/user/account/info/",
@@ -65,6 +73,7 @@ export default {
               ...resp,
               is_login: true,
             });
+            console.log("islogin");
             data.success(resp);
           } else {
             data.error(resp);
@@ -75,9 +84,10 @@ export default {
         } 
       })
     },
+    
     logout(context) {
+      localStorage.removeItem("jwt_token");
       context.commit("logout");
-      console.log("logout");
     }
   },
   modules: {
