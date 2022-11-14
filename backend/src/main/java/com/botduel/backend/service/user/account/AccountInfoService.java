@@ -2,6 +2,6 @@ package com.botduel.backend.service.user.account;
 
 import java.util.Map;
 
-public interface InfoService {
+public interface AccountInfoService {
     public Map<String, String> getInfo();
 }

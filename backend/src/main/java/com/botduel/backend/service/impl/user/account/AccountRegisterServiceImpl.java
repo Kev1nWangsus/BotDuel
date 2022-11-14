@@ -3,7 +3,7 @@ package com.botduel.backend.service.impl.user.account;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.botduel.backend.mapper.UserMapper;
 import com.botduel.backend.pojo.User;
-import com.botduel.backend.service.user.account.RegisterService;
+import com.botduel.backend.service.user.account.AccountRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 @Service
-public class RegisterServiceImpl implements RegisterService {
+public class AccountRegisterServiceImpl implements AccountRegisterService {
     @Autowired
     UserMapper userMapper;
 

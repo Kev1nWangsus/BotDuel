@@ -2,7 +2,7 @@ package com.botduel.backend.service.impl.user.account;
 
 import com.botduel.backend.pojo.User;
 import com.botduel.backend.service.impl.utils.UserDetailsImpl;
-import com.botduel.backend.service.user.account.LoginService;
+import com.botduel.backend.service.user.account.AccountLoginService;
 import com.botduel.backend.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class LoginServiceImpl implements LoginService {
+public class AccountLoginServiceImpl implements AccountLoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
