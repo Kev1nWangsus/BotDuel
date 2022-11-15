@@ -20,7 +20,7 @@ public class BotRemoveServiceImpl implements BotRemoveService {
     public Map<String, String> remove(Map<String, String> data) {
         User user = UserUtil.getUser();
 
-        int botId = Integer.parseInt(data.get("bot_id"));
+        int botId = Integer.parseInt(data.get("botId"));
         Bot bot = botMapper.selectById(botId);
 
         Map<String, String> map = new HashMap<>();

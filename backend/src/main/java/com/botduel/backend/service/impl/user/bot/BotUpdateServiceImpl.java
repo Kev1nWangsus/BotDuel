@@ -29,7 +29,7 @@ public class BotUpdateServiceImpl implements BotUpdateService {
 
         Map<String, String> map = new HashMap<>();
 
-        int botId = Integer.parseInt(data.get("bot_id"));
+        int botId = Integer.parseInt(data.get("botId"));
         Bot bot = botMapper.selectById(botId);
 
         if (bot == null) {
