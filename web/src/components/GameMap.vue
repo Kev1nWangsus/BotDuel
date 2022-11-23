@@ -16,8 +16,12 @@ export default {
         let parent = ref(null);
         let canvas = ref(null);
         onMounted(() => {
-            // after onMounted, create game object   
-            new GameMap(canvas.value.getContext('2d'), parent.value, store);
+            // after onMounted, create game object 
+            store.commit(
+                "updateGameObject",
+                new GameMap(canvas.value.getContext('2d'), parent.value, store)
+            );
+            console.log(store.state.pk.gameObject);
         });
         return {
             parent,
