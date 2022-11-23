@@ -1,8 +1,10 @@
 package com.botduel.backend.websocket;
 
 import com.alibaba.fastjson.JSONObject;
+import com.botduel.backend.mapper.BotMapper;
 import com.botduel.backend.mapper.RecordMapper;
 import com.botduel.backend.mapper.UserMapper;
+import com.botduel.backend.pojo.Bot;
 import com.botduel.backend.pojo.User;
 import com.botduel.backend.websocket.utils.Game;
 import com.botduel.backend.websocket.utils.JwtAuthentication;
@@ -25,10 +27,11 @@ public class WebSocketServer {
     public final static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
     private User user;
     private Session session = null;
-    private Game game = null;
-    private static RestTemplate restTemplate;
+    public static RestTemplate restTemplate;
+    private static BotMapper botMapper;
     private static UserMapper userMapper;
     public static RecordMapper recordMapper;
+    public Game game = null;
 
     private final static String ADD_PLAYER_URL = "http://127.0.0.1:3001/player/add/";
     private final static String REMOVE_PLAYER_URL = "http://127.0.0.1:3001/player/remove/";
@@ -43,38 +46,23 @@ public class WebSocketServer {
         WebSocketServer.recordMapper = recordMapper;
     }
 
-    @Autowired
-    public void setRestTemplate(RestTemplate restTemplate) {
-        WebSocketServer.restTemplate = restTemplate;
-    }
-    @OnOpen
-    public void onOpen(Session session, @PathParam("token") String token) throws IOException {
-        this.session = session;
-        System.out.println("Connected");
-        Integer userId = JwtAuthentication.getUserId(token);
-        this.user = userMapper.selectById(userId);
-
-        if (this.user != null) {
-            users.put(userId, this);
-        } else {
-            this.session.close();
-        }
-        System.out.println(users);
-    }
-
-    @OnClose
-    public void onClose() {
-        if (this.user != null) {
-            users.remove(this.user.getId());
-        }
-        System.out.println("Disconnected");
-    }
-
-    public static void startGame(Integer aId, Integer bId) {
+    public static void startGame(Integer aId, Integer aBotId, Integer bId, Integer bBotId) {
         User a = userMapper.selectById(aId);
         User b = userMapper.selectById(bId);
 
-        Game game = new Game(13, 14, 20, a.getId(), b.getId());
+        Bot botA = botMapper.selectById(aBotId);
+        Bot botB = botMapper.selectById(bBotId);
+
+        Game game = new Game(
+                13,
+                14,
+                20,
+                a.getId(),
+                botA,
+                b.getId(),
+                botB
+        );
+
         game.createMap();
 
         if (users.get(a.getId()) != null) {
@@ -114,11 +102,46 @@ public class WebSocketServer {
             users.get(b.getId()).sendMessage(respB.toJSONString());
         }
     }
+
+    @Autowired
+    public void setRestTemplate(RestTemplate restTemplate) {
+        WebSocketServer.restTemplate = restTemplate;
+    }
+
+    @OnOpen
+    public void onOpen(Session session, @PathParam("token") String token) throws IOException {
+        this.session = session;
+        System.out.println("Connected");
+        Integer userId = JwtAuthentication.getUserId(token);
+        this.user = userMapper.selectById(userId);
+
+        if (this.user != null) {
+            users.put(userId, this);
+        } else {
+            this.session.close();
+        }
+        System.out.println(users);
+    }
+
+    @OnClose
+    public void onClose() {
+        if (this.user != null) {
+            users.remove(this.user.getId());
+        }
+        System.out.println("Disconnected");
+    }
+
+    @Autowired
+    public void setBotMapper(BotMapper botMapper) {
+        WebSocketServer.botMapper = botMapper;
+    }
+
     private void startMatching(Integer botId) {
         System.out.println("start matching");
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("user_id", this.user.getId().toString());
         data.add("rating", this.user.getRating().toString());
+        data.add("bot_id", botId.toString());
         restTemplate.postForObject(ADD_PLAYER_URL, data, String.class);
     }
 
@@ -130,10 +153,16 @@ public class WebSocketServer {
     }
 
     private void move(int direction) {
-        if (game.getPlayerA().getId().equals(user.getId()))  {
+        if (game.getPlayerA().getId().equals(user.getId())) {
             game.setNextStepA(direction);
+            if (game.getPlayerA().getBotId().equals(-1)) {
+                game.setNextStepA(direction);
+            }
         } else if (game.getPlayerB().getId().equals(user.getId())) {
             game.setNextStepB(direction);
+            if (game.getPlayerB().getBotId().equals(-1)) {
+                game.setNextStepB(direction);
+            }
         }
     }
 

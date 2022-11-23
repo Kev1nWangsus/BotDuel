@@ -75,7 +75,7 @@ export default {
             })
         }
 
-        refresh_bots();  // 从云端动态获取bots
+        refresh_bots(); 
 
         return {
             match_btn_info,

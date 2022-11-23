@@ -1,8 +1,11 @@
 package com.botduel.backend.websocket.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.botduel.backend.pojo.Bot;
 import com.botduel.backend.pojo.Record;
 import com.botduel.backend.websocket.WebSocketServer;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,8 +14,7 @@ import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Game extends Thread {
-    private final static int[] dx = {-1, 0, 1, 0};
-    private final static int[] dy = {0, -1, 0, 1};
+    private final static String ADD_BOT_URL = "http://127.0.0.1:3002/bot/add/";
     private final Integer rows;
     private final Integer cols;
     private final Integer innerWallsCount;
@@ -26,14 +28,34 @@ public class Game extends Thread {
     private String status = "playing";  // playing, finished
 
     private String loser = "";    // a, b, tie
+    private final int MAX_TRIALS = 1000;
 
-    public Game(Integer rows, Integer cols, Integer innerWallsCount, Integer idA, Integer idB) {
+    public Game(
+            Integer rows,
+            Integer cols,
+            Integer innerWallsCount,
+            Integer idA,
+            Bot botA,
+            Integer idB,
+            Bot botB
+    ) {
         this.rows = rows;
         this.cols = cols;
         this.innerWallsCount = innerWallsCount;
         this.gameMap = new int[rows][cols];
-        this.playerA = new Player(idA, rows - 2, 1, new ArrayList<>());
-        this.playerB = new Player(idB, 1, cols - 2, new ArrayList<>());
+        Integer botIdA = -1, botIdB = -1;
+        String botCodeA = "", botCodeB = "";
+        if (botA != null) {
+            botIdA = botA.getId();
+            botCodeA = botA.getCode();
+        }
+        if (botB != null) {
+            botIdB = botB.getId();
+            botCodeB = botB.getCode();
+        }
+        playerA = new Player(idA, rows - 2, 1, botIdA, botCodeA, new ArrayList<>());
+        playerB = new Player(idB, 1, cols - 2, botIdB, botCodeB, new ArrayList<>());
+
     }
 
     public Player getPlayerA() {
@@ -42,6 +64,37 @@ public class Game extends Thread {
 
     public Player getPlayerB() {
         return playerB;
+    }
+
+    private String getInput(Player player) {
+        // convert current match to string
+        Player me, you;
+        if (playerA.getId().equals(player.getId())) {
+            me = playerA;
+            you = playerB;
+        } else {
+            me = playerB;
+            you = playerA;
+        }
+
+        return getMapString() + "#" +
+                me.getSx() + "#" +
+                me.getSy() + "#(" +
+                me.getStepString() + ")#" +
+                you.getSx() + "#" +
+                you.getSy() + "#(" +
+                you.getStepString() + ")";
+    }
+
+    private void sendBotCode(Player player) {
+        if (player.getBotId().equals(-1)) {
+            return;
+        }
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", player.getId().toString());
+        data.add("bot_code", player.getBotCode());
+        data.add("input", getInput(player));
+        WebSocketServer.restTemplate.postForObject(ADD_BOT_URL, data, String.class);
     }
 
     public void setNextStepA(Integer nextStepA) {
@@ -72,6 +125,8 @@ public class Game extends Thread {
         }
 
         gameMap[sx][sy] = 1;
+        int[] dx = {-1, 0, 1, 0};
+        int[] dy = {0, 1, 0, -1};
         for (int i = 0; i < 4; i++) {
             int x = sx + dx[i], y = sy + dy[i];
             if (x >= 0 && x < this.rows && y >= 0 && y < this.cols && gameMap[x][y] == 0) {
@@ -103,7 +158,7 @@ public class Game extends Thread {
 
         Random random = new Random();
         for (int i = 0; i < this.innerWallsCount; i++) {
-            for (int j = 0; j < 1000; j++) {
+            for (int j = 0; j < MAX_TRIALS; j++) {
                 int r = random.nextInt(this.rows);
                 int c = random.nextInt(this.cols);
 
@@ -124,7 +179,7 @@ public class Game extends Thread {
     }
 
     public void createMap() {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < MAX_TRIALS; i++) {
             if (draw()) {
                 break;
             }
@@ -138,6 +193,9 @@ public class Game extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        sendBotCode(playerA);
+        sendBotCode(playerB);
 
         for (int i = 0; i < 50; i++) {
             try {
@@ -270,7 +328,7 @@ public class Game extends Thread {
 
     @Override
     public void run() {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < MAX_TRIALS; i++) {
             if (nextStep()) {
                 judge();
                 if ("playing".equals(status)) {

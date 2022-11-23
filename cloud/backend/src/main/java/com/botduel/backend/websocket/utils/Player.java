@@ -15,6 +15,9 @@ public class Player {
     private Integer id;
     private Integer sx;
     private Integer sy;
+    private Integer botId;
+    private String botCode;
+
     private List<Integer> steps;
 
     private boolean checkTailIncreasing(int step) {
@@ -29,7 +32,8 @@ public class Player {
     public List<Cell> getCells() {
         List<Cell> result = new ArrayList<>();
 
-        int[] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
+        int[] dx = {-1, 0, 1, 0};
+        int[] dy = {0, 1, 0, -1};
         int x = sx, y = sy;
         int step = 0;
         result.add(new Cell(x, y));
