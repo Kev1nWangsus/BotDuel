@@ -143,12 +143,12 @@ public class Game extends Thread {
             try {
                 // wait for 1 sec
                 Thread.sleep(100);
-                lock.unlock();
+                lock.lock();
                 try {
                     if (nextStepA != null && nextStepB != null) {
                         playerA.getSteps().add(nextStepA);
                         playerB.getSteps().add(nextStepB);
-                        break;
+                        return true;
                     }
                 } finally {
                     lock.unlock();
@@ -203,8 +203,12 @@ public class Game extends Thread {
     }
 
     private void sendAllMessages(String message) {
-        WebSocketServer.users.get(playerA.getId()).sendMessage(message);
-        WebSocketServer.users.get(playerB.getId()).sendMessage(message);
+        if (WebSocketServer.users.get(playerA.getId()) != null) {
+            WebSocketServer.users.get(playerA.getId()).sendMessage(message);
+        }
+        if (WebSocketServer.users.get(playerB.getId()) != null) {
+            WebSocketServer.users.get(playerB.getId()).sendMessage(message);
+        }
     }
 
     private void sendMove() {
@@ -214,7 +218,9 @@ public class Game extends Thread {
             JSONObject resp = new JSONObject();
             resp.put("event", "move");
             resp.put("a_direction", nextStepA);
+            System.out.println(nextStepA);
             resp.put("b_direction", nextStepB);
+            System.out.println(nextStepB);
             sendAllMessages(resp.toJSONString());
             nextStepA = nextStepB = null;
         } finally {
@@ -276,7 +282,6 @@ public class Game extends Thread {
             } else {
                 status = "finished";
                 lock.lock();
-
                 try {
                     if (nextStepA == null && nextStepB == null) {
                         loser = "all";

@@ -1,4 +1,4 @@
-package com.botduel.backend.controller.pk;
+package com.botduel.backend.controller.match;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

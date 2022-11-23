@@ -4,7 +4,6 @@ import com.botduel.backend.mapper.BotMapper;
 import com.botduel.backend.pojo.Bot;
 import com.botduel.backend.pojo.User;
 import com.botduel.backend.service.impl.utils.UserDetailsImpl;
-import com.botduel.backend.service.impl.utils.UserUtil;
 import com.botduel.backend.service.user.bot.BotUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -85,7 +84,6 @@ public class BotUpdateServiceImpl implements BotUpdateService {
                 title,
                 description,
                 code,
-                bot.getRating(),
                 bot.getCreateTime(),
                 new Date()
         );

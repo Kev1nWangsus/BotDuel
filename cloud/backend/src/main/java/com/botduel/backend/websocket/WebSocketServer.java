@@ -16,22 +16,22 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 @Component
 @ServerEndpoint("/websocket/{token}")
 public class WebSocketServer {
 
     public final static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
-    private final static CopyOnWriteArraySet<User> matchPool = new CopyOnWriteArraySet<>();
     private User user;
     private Session session = null;
     private Game game = null;
     private static RestTemplate restTemplate;
     private static UserMapper userMapper;
     public static RecordMapper recordMapper;
+
+    private final static String ADD_PLAYER_URL = "http://127.0.0.1:3001/player/add/";
+    private final static String REMOVE_PLAYER_URL = "http://127.0.0.1:3001/player/remove/";
 
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
@@ -70,7 +70,7 @@ public class WebSocketServer {
         System.out.println("Disconnected");
     }
 
-    private void startGame(Integer aId, Integer bId) {
+    public static void startGame(Integer aId, Integer bId) {
         User a = userMapper.selectById(aId);
         User b = userMapper.selectById(bId);
 
@@ -116,29 +116,17 @@ public class WebSocketServer {
     }
     private void startMatching(Integer botId) {
         System.out.println("start matching");
-        matchPool.add(this.user);
-
-        while (matchPool.size() >= 2) {
-            Iterator<User> it = matchPool.iterator();
-            User a = it.next(), b = it.next();
-            matchPool.remove(a);
-            matchPool.remove(b);
-
-            Game game = new Game(13, 14, 20,
-                    a.getId(), b.getId());
-
-            game.createMap();
-            game.start();
-
-            users.get(a.getId()).game = game;
-            users.get(b.getId()).game = game;
-        }
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", this.user.getId().toString());
+        data.add("rating", this.user.getRating().toString());
+        restTemplate.postForObject(ADD_PLAYER_URL, data, String.class);
     }
 
     private void stopMatching() {
         System.out.println("stop matching");
-        matchPool.remove(this.user);
+        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
+        data.add("user_id", this.user.getId().toString());
+        restTemplate.postForObject(REMOVE_PLAYER_URL, data, String.class);
     }
 
     private void move(int direction) {
@@ -160,6 +148,7 @@ public class WebSocketServer {
         } else if ("stop-matching".equals(event)) {
             stopMatching();
         } else if ("move".equals(event)) {
+            System.out.println("move");
             move(data.getInteger("direction"));
         }
     }

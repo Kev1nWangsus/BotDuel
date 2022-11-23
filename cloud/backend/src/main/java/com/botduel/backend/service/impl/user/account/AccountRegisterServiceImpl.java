@@ -71,7 +71,7 @@ public class AccountRegisterServiceImpl implements AccountRegisterService {
         String encodedPassword = passwordEncoder.encode(password);
         String photo = "https://cdn.acwing.com/media/user/profile/photo/237677_lg_aba03d5c4d.jpg";
 
-        User user = new User(null, username, encodedPassword, photo);
+        User user = new User(null, username, encodedPassword, photo, 1500);
         userMapper.insert(user);
         map.put("error_message", "success");
         return map;

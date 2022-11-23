@@ -62,7 +62,7 @@ public class BotCreateServiceImpl implements BotCreateService {
         }
 
         Date date = new Date();
-        Bot bot = new Bot(null, user.getId(), title, description, code, 1500, date, date);
+        Bot bot = new Bot(null, user.getId(), title, description, code, date, date);
 
         botMapper.insert(bot);
         map.put("error_message", "success");

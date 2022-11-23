@@ -21,7 +21,6 @@ public class Bot {
     private String title;
     private String description;
     private String code;
-    private Integer rating;
     private Date createTime;
     private Date modifyTime;
 }
