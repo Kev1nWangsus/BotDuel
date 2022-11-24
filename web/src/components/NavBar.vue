@@ -5,13 +5,13 @@
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link :class="route_name =='pk_index' ? 'nav-link active' :'nav-link'" :to="{name: 'pk_index'}">PK</router-link>
+              <router-link :class="route_name =='pk_index' ? 'nav-link active' :'nav-link'" :to="{name: 'pk_index'}">Match</router-link>
             </li>
             <li class="nav-item">
-              <router-link :class="route_name =='record_index' ? 'nav-link active' :'nav-link'" :to="{name: 'record_index'}">List</router-link>
+              <router-link :class="route_name =='record_index' ? 'nav-link active' :'nav-link'" :to="{name: 'record_index'}">Record</router-link>
             </li>
             <li class="nav-item">
-              <router-link :class="route_name =='ranklist_index' ? 'nav-link active' : 'nav-link'" :to="{name: 'ranklist_index'}">Rank</router-link>
+              <router-link :class="route_name =='rank_index' ? 'nav-link active' : 'nav-link'" :to="{name: 'rank_index'}">Rank</router-link>
             </li>
           </ul>
           <ul class="navbar-nav" v-if="$store.state.user.is_login">
