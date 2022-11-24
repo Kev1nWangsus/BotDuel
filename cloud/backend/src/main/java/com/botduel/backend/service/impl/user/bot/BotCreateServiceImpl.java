@@ -1,5 +1,6 @@
 package com.botduel.backend.service.impl.user.bot;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.botduel.backend.mapper.BotMapper;
 import com.botduel.backend.pojo.Bot;
 import com.botduel.backend.pojo.User;
@@ -58,6 +59,13 @@ public class BotCreateServiceImpl implements BotCreateService {
 
         if (code.length() > CODE_LIMIT) {
             map.put("error_message", "Code cannot exceed 10000");
+            return map;
+        }
+
+        QueryWrapper<Bot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getId());
+        if (botMapper.selectCount(queryWrapper) >= 10) {
+            map.put("error_message", "One user can only create 10 bots!");
             return map;
         }
 
